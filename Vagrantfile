@@ -10,6 +10,7 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
   config.vm.network :forwarded_port, guest: 80, host: 8080
   config.vm.network :forwarded_port, guest: 8080, host: 8081
+  config.vm.network :forwarded_port, guest: 2222, host: 2222
 
   config.vm.provision "shell", path: "provision.sh"
 end

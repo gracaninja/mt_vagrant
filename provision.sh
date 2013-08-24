@@ -2,9 +2,10 @@
 
 
 ## Verify if we already run provision code
-#if [ -f "/var/vagrant_provision" ]; 
-#     then exit 0
-#fi
+if [ -f "/var/vagrant_provision" ]; 
+    echo "Already did provisioning exit"
+    then exit 0
+fi
 
 echo "Updating packages"
 sudo apt-get update
@@ -23,8 +24,12 @@ echo "Starting to compile moses"
 
 ## Install pip
 echo "Updating PIP"
-sudo apt-get -y install python-pip
+#sudo apt-get -y install python-pip
 #pip install ipython
+
+
+
+
 
 echo "Copying sample models"
 cp /vagrant/sample-models.tgz .
