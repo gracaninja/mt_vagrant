@@ -1,10 +1,21 @@
 #!/usr/bin/env bash
 
+USER=vagrant
+HOME=/home/$USER/
+NR_PROCESSORS=$(grep -c ^processor /proc/cpuinfo)
+
+echo "HOME " + $HOME
+echo "NR PROCESSORS: " + $NR_PROCESSORS
+
+
+su $USER 
 
 echo "Updating packages"
 sudo apt-get update
 
 echo "Adding base packages"
+sudo apt-get -y install git
+sudo apt-get -y install emacs23-lucid
 sudo apt-get -y install libboost-all-dev
 sudo apt-get -y install build-essential libz-dev libbz2-dev
 sudo apt-get -y install  libxmlrpc-c3-dev
@@ -17,20 +28,25 @@ cd cmph-2.0
 ./configure
 make
 sudo make install
+## Back to base directory
+cd $HOME
 
 
 echo "Copying moses"
-cp -R /vagrant/mosesdecoder/ .
-cd mosesdecoder/
+echo $PWD
+git clone git://github.com/moses-smt/mosesdecoder.git
+cd $HOME/mosesdecoder/
+echo $PWD
 
 echo "Starting to compile moses"
-./bjam --with-cmph=/user/local/ 
+bjam --with-cmph=/user/local/ -j$NR_PROCESSORS
 
+cd $HOME
 
 echo "Copying sample models"
-cp /vagrant/sample-models.tgz .
+wget http://www.statmt.org/moses/download/sample-models.tgz
 tar -xzvf sample-models.tgz
-cd sample-models/
+
 
 
 
